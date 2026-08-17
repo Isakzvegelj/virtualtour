@@ -28,15 +28,15 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 
 const files = [
- 'CAM_20260816190214_0073_D.JPG','CAM_20260816190237_0074_D.JPG','CAM_20260816190301_0075_D.JPG',
- 'CAM_20260816190325_0076_D.JPG','CAM_20260816190403_0077_D.JPG','CAM_20260816190616_0078_D.JPG',
- 'CAM_20260816190704_0079_D.JPG','CAM_20260816190740_0080_D.JPG','CAM_20260816190829_0081_D.JPG'];
+ 'CAM_20260816190214_0073_D.webp','CAM_20260816190237_0074_D.webp','CAM_20260816190301_0075_D.webp',
+ 'CAM_20260816190325_0076_D.webp','CAM_20260816190403_0077_D.webp','CAM_20260816190616_0078_D.webp',
+ 'CAM_20260816190704_0079_D.webp','CAM_20260816190740_0080_D.webp','CAM_20260816190829_0081_D.webp'];
 const labels=['Entry / bedroom','Bedroom detail','Bedroom to living area','Living area','Kitchen / dining','Kitchen return','Living room','Transition view','Final station'];
 const imagePath = name => `panoramas/${name}`;
 
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,1100); camera.position.set(0,0,0.1);
-const renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.5)); renderer.setSize(innerWidth,innerHeight); renderer.outputColorSpace=THREE.SRGBColorSpace; document.querySelector('#viewer').appendChild(renderer.domElement);
+const renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.15)); renderer.setSize(innerWidth,innerHeight); renderer.outputColorSpace=THREE.SRGBColorSpace; document.querySelector('#viewer').appendChild(renderer.domElement);
 const sphere=new THREE.Mesh(new THREE.SphereGeometry(100,64,40),new THREE.MeshBasicMaterial({side:THREE.BackSide})); scene.add(sphere);
 const loader=new THREE.TextureLoader(); let current=0, lon=0, lat=0, fov=75, drag=false, lastX=0,lastY=0;
 function loadStation(index){current=(index+files.length)%files.length; document.querySelector('#stationTitle').textContent=`Station ${String(current+1).padStart(2,'0')} · ${labels[current]}`; document.querySelectorAll('.thumb').forEach((el,i)=>el.classList.toggle('active',i===current)); document.querySelector('#error').style.display='none'; loader.load(imagePath(files[current]),texture=>{texture.colorSpace=THREE.SRGBColorSpace;sphere.material.map=texture;sphere.material.needsUpdate=true},undefined,err=>{console.error('Could not load panorama',err);document.querySelector('#errorText').textContent=`Could not open ${files[current]}. Check that the viewer was launched through the local server.`;document.querySelector('#error').style.display='block'}); drawPlan();}
